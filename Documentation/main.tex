@@ -1,0 +1,249 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with`a4paper' for UK/EU standard size
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+
+\title{RUST for Embedded and Automotive: Research and Development Project, Phase 1}
+\author{Saransh Rastogi}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+This report provides an introduction to the programming language RUST and uses the traditional C-Language as a reference for comparison. Following points have been considered for the first phase of the research and development project:
+\begin{itemize}
+\item Introduce the programming language RUST
+\item Use appropriate algorithms to compare RUST with C
+\begin{itemize}
+    \item Binary Search
+    \item Sieve of Eratosthenes
+\end{itemize}
+\item Discuss
+\begin{itemize}
+    \item Code Creation
+    \item Testing possibilities
+    \item Documentation possibilities
+    \item Evaluation of code quality
+\end{itemize}
+\item Assess process of creating executable files for x86 (64 Bit) and ARMv6
+\end{itemize}
+\end{abstract}
+
+\newpage
+
+\tableofcontents
+%\thispagestyle{empty}
+\pagenumbering{roman}
+
+\newpage
+
+\pagenumbering{arabic}
+\section{Rough Notes}
+\subsection{Time and Space Complexity}
+\begin{itemize}
+    \item Time Complexity \textrightarrow This is a measure of the \textbf{amount of time} taken by a computer to solve a problem. 
+    \begin{itemize}
+        \item best case
+        \item average case
+        \item worst case
+    \end{itemize}
+    \item Space Complexity \textrightarrow This is a measure of how much \textbf{memory is required} by a computer to solve a problem.
+    \item Constraint for both types of complexities is that the input values should be of a specified size
+    \item Asymptotic Notations
+    \begin{itemize}
+        \item Big O $(O)$
+        \item Big Theta $(\Theta)$
+        \item Big Omega $(\Omega)$
+    \end{itemize}
+\end{itemize} 
+
+\subsection{Searching Problems}
+A searching problem, in general, can be described as follows:
+Locate an element \textit{i} in a list of distinct elements \texttt{a1,a2,...,an}. If it is not in the list, return $0$. Otherwise return the position of the element \textit{i} in the list.
+Two basic methods to solve this problem are:
+\begin{enumerate}
+    \item linear search
+    \item binary search 
+\end{enumerate}
+
+\subsubsection{Linear Search}
+This is also called \textit{sequential search}. A sorting of the list to be searched within is not required. This is a basic approach, where we iterate through each element of the list, beginning at the first until we reach the element being searched for. Since the running time of the algorithm scales proportionally with the size of the list, the time complexity of the algorithm is \textit{$O(n)$}. \newline \newline
+\textbf{Insert Pseudocode here!} \newline\newline
+We will however use the binary search method as an example to compare RUST with C, due to its efficiency as compared to its linear counterpart.
+
+\subsubsection{Binary Search}
+Prerequisite, as opposed to linear search, is that the list must be sorted numerically. Whether it is sorted in ascending or descending order affects the implementation, but not the core idea. For sake of simplicity, we will consider a list sorted in ascending order. \newline
+The core idea is as follows:
+\begin{enumerate}
+    \item Compare the target number/value with the number in the center of the list
+    \item If it is larger than the center element, continue the search in the upper half of the list
+\end{enumerate}
+This means, that half of the elements in the database are disregarded immediately. This is a \textbf{recursive approach}, since the same function is being called upon a database which is continuously decreasing in size.\newline 
+
+
+\textbf{Time Complexity} \newline
+\newline
+If $n$ is the number of elements in the database/array/list, then the \textbf{worst case} complexity is $O(\log(n))$. On the other hand, for the off-chance that the element to be searched for is the center element of the original list, the \textbf{best case} complexity is $O(1)$.\newline 
+
+\textbf{Space Complexity} \newline
+\newline
+
+\subsubsection{Pseudocode: Binary Search}
+\textrightarrow Source: rosettacode.org (time point of citation should be given)
+\begin{itemize}
+    \item \textrightarrow Should we assume that the input list is pre-sorted, or should we check for that and sort it in case it is not sorted?
+    \item \textrightarrow Quick Sort
+    \item Algorithmen in C von Robert Sedgiweck
+    \item \textrightarrow Would it not be better to convert the input list into a set of unique elements before beginnign with the search?
+    \item this would be necessary. We have to however store the indices of the elements occurring multiple times, so that if that element is searched for it gives all of the indices the element occurs in. In python for example a dictionary could be used. See how we could do this in C and RUST 
+\end{itemize}
+
+\textbf{Iterative Approach}
+\begin{lstlisting}
+BinarySearch(InputList, Value) {
+/* Input Parameters:
+InputList = [0,1,2,3...,n-1]
+Value is the value/element being searched for
+*/
+low = 0
+high = n-1
+while (low <= high): {
+    mid = (low + high) / 2
+    if (InputList[mid] > value)
+        high = mid - 1
+    else if (InputList[mid < value])
+        low = mid + 1
+    else 
+        return mid // best case, search-value is the center element
+    }
+return 0 // Not found, return 0
+}
+\end{lstlisting}
+
+\textbf{Recursive Approach}
+\begin{lstlisting}
+low = 0
+high = n-1
+BinarySearch(InputList, Value, low, high) {
+    if (high < low)
+        return 0            // Not found, return 0
+    mid = (low + high) / 2
+    if (InputList[mid] > value)
+        return BinarySearch(InputList, Value, low, mid-1)
+    else if (InputList[mid] < value)
+        return BinarySearch(InputList, Value, mid+1, high)
+    else 
+        return mid          // best case, search-value is the center element
+}
+\end{lstlisting}
+
+\iffalse
+%\iftrue
+\section{Introduction}
+
+Your introduction goes here! Simply start writing your document and use the Recompile button to view the updated PDF preview. Examples of commonly used commands and features are listed below, to help you get started.
+
+Once you're familiar with the editor, you can find various project setting in the Overleaf menu, accessed via the button in the very top left of the editor. To view tutorials, user guides, and further documentation, please visit our \href{https://www.overleaf.com/learn}{help library}, or head to our plans page to \href{https://www.overleaf.com/user/subscription/plans}{choose your plan}.
+
+\section{Some examples to get started}
+
+\subsection{How to create Sections and Subsections}
+
+Simply use the section and subsection commands, as in this example document! With Overleaf, all the formatting and numbering is handled automatically according to the template you've chosen. If you're using Rich Text mode, you can also create new section and subsections via the buttons in the editor toolbar.
+
+\subsection{How to include Figures}
+
+First you have to upload the image file from your computer using the upload link in the file-tree menu. Then use the includegraphics command to include it in your document. Use the figure environment and the caption command to add a number and a caption to your figure. See the code for Figure \ref{fig:frog} in this section for an example.
+
+Note that your figure will automatically be placed in the most appropriate place for it, given the surrounding text and taking into account other figures or tables that may be close by. You can find out more about adding images to your documents in this help article on \href{https://www.overleaf.com/learn/how-to/Including_images_on_Overleaf}{including images on Overleaf}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.3\textwidth]{frog.jpg}
+\caption{\label{fig:frog}This frog was uploaded via the file-tree menu.}
+\end{figure}
+
+\subsection{How to add Tables}
+
+Use the table and tabular environments for basic tables --- see Table~\ref{tab:widgets}, for example. For more information, please see this help article on \href{https://www.overleaf.com/learn/latex/tables}{tables}. 
+
+\begin{table}
+\centering
+\begin{tabular}{l|r}
+Item & Quantity \\\hline
+Widgets & 42 \\
+Gadgets & 13
+\end{tabular}
+\caption{\label{tab:widgets}An example table.}
+\end{table}
+
+\subsection{How to add Comments and Track Changes}
+
+Comments can be added to your project by highlighting some text and clicking ``Add comment'' in the top right of the editor pane. To view existing comments, click on the Review menu in the toolbar above. To reply to a comment, click on the Reply button in the lower right corner of the comment. You can close the Review pane by clicking its name on the toolbar when you're done reviewing for the time being.
+
+Track changes are available on all our \href{https://www.overleaf.com/user/subscription/plans}{premium plans}, and can be toggled on or off using the option at the top of the Review pane. Track changes allow you to keep track of every change made to the document, along with the person making the change. 
+
+\subsection{How to add Lists}
+
+You can make lists with automatic numbering \dots
+
+\begin{enumerate}
+\item Like this,
+\item and like this.
+\end{enumerate}
+\dots or bullet points \dots
+\begin{itemize}
+\item Like this,
+\item and like this.
+\end{itemize}
+
+\subsection{How to write Mathematics}
+
+\LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
+\[S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
+      = \frac{1}{n}\sum_{i}^{n} X_i\]
+denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
+
+
+\subsection{How to change the margins and paper size}
+
+Usually the template you're using will have the page margins and paper size set correctly for that use-case. For example, if you're using a journal article template provided by the journal publisher, that template will be formatted according to their requirements. In these cases, it's best not to alter the margins directly.
+
+If however you're using a more general template, such as this one, and would like to alter the margins, a common way to do so is via the geometry package. You can find the geometry package loaded in the preamble at the top of this example file, and if you'd like to learn more about how to adjust the settings, please visit this help article on \href{https://www.overleaf.com/learn/latex/page_size_and_margins}{page size and margins}.
+
+\subsection{How to change the document language and spell check settings}
+
+Overleaf supports many different languages, including multiple different languages within one document. 
+
+To configure the document language, simply edit the option provided to the babel package in the preamble at the top of this example project. To learn more about the different options, please visit this help article on \href{https://www.overleaf.com/learn/latex/International_language_support}{international language support}.
+
+To change the spell check language, simply open the Overleaf menu at the top left of the editor window, scroll down to the spell check setting, and adjust accordingly.
+
+\subsection{How to add Citations and a References List}
+
+You can simply upload a \verb|.bib| file containing your BibTeX entries, created with a tool such as JabRef. You can then cite entries from it, like this: \cite{greenwade93}. Just remember to specify a bibliography style, as well as the filename of the \verb|.bib|. You can find a \href{https://www.overleaf.com/help/97-how-to-include-a-bibliography-using-bibtex}{video tutorial here} to learn more about BibTeX.
+
+If you have an \href{https://www.overleaf.com/user/subscription/plans}{upgraded account}, you can also import your Mendeley or Zotero library directly as a \verb|.bib| file, via the upload menu in the file-tree.
+
+\subsection{Good luck!}
+
+We hope you find Overleaf useful, and do take a look at our \href{https://www.overleaf.com/learn}{help library} for more tutorials and user guides! Please also let us know if you have any feedback using the Contact Us link at the bottom of the Overleaf menu --- or use the contact form at \url{https://www.overleaf.com/contact}.
+
+\fi
+
+\bibliographystyle{alpha}
+\bibliography{sample}
+
+\end{document}
